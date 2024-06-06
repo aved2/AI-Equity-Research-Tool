@@ -57,13 +57,10 @@ if query:
                 chunk_overlap=200
             )
             docs = rsplitter.split_documents(data)
-            #docs2 = rsplitter.split_text(text)
-            #docs.extend(docs2)
 
             #create text embeddings
             main_placefolder.text("Creating vector embeddings...")
             embeddings = OpenAIEmbeddings()
-            st.write("passed")
             vectorindex_openai = FAISS.from_documents(docs, embeddings)
 
             #save to FAISS index
@@ -89,7 +86,7 @@ if query:
                 st.write(source)
     except Exception as e:
         st.error("An error occurred. Please try a different URL.")
-        st.write(e)
+        print(e)
 
 
 
