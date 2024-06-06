@@ -13,6 +13,7 @@ import faiss
 from dotenv import load_dotenv
 
 load_dotenv()
+openai.api_key = st.secrets['OPENAI_API_KEY']
 
 #UI
 st.title("AI Equity Research Assistant")
