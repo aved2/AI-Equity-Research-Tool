@@ -4,5 +4,5 @@ langchain_community
 openai
 tiktoken
 unstructured
-faiss
+faiss-cpu
 python-dotenv
