@@ -1,8 +1,10 @@
 streamlit
 langchain
 langchain_community
+langchain_openai
 openai
 tiktoken
 unstructured
 faiss-cpu
 python-dotenv
+
