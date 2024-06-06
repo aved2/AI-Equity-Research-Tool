@@ -88,6 +88,7 @@ if query:
                 st.write(source)
     except Exception as e:
         st.error("An error occurred. Please try a different URL.")
+        print(e)
 
 
 
