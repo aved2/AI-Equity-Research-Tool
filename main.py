@@ -2,7 +2,7 @@ import os
 import streamlit as st
 import time
 import langchain
-from langchain import OpenAI
+from langchain_community.llms.OpenAI import OpenAI
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.chains.qa_with_sources.loading import load_qa_with_sources_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
