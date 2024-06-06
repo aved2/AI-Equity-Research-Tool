@@ -7,7 +7,7 @@ from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.chains.qa_with_sources.loading import load_qa_with_sources_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import UnstructuredURLLoader
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 import faiss
 from dotenv import load_dotenv
