@@ -68,26 +68,28 @@ if query:
                 faiss.write_index(vectorindex_openai.index, file_path)
     
                 main_placefolder.text("Retrieving your answer...")
+
+                vectorindex_openai = FAISS.from_documents(docs, embeddings)
+                vectorindex_openai.index = faiss.read_index(file_path)
+                llm = OpenAI(openai_api_key= st.secrets["OPENAI_API_KEY"], temperature=0.9, max_tokens=500)
+                retriever = vectorindex_openai.as_retriever()
+                chain = RetrievalQAWithSourcesChain.from_llm(llm = llm, retriever = retriever)
+                result = chain({"question": query}, return_only_outputs=True)
+                main_placefolder.text("")
+                st.header("Answer")
+                st.write(result["answer"])
+            
+                #Display sources
+                sources = result.get("sources", )
+                if sources:
+                    st.header("Sources")
+                    source_list = sources.split("\n")
+                    for source in source_list:
+                        st.write(source)
             except Exception as e:
                 st.error("An error occurred. Please try a different URL.")
                 print(e)
-    vectorindex_openai = FAISS.from_documents(docs, embeddings)
-    vectorindex_openai.index = faiss.read_index(file_path)
-    llm = OpenAI(openai_api_key= st.secrets["OPENAI_API_KEY"], temperature=0.9, max_tokens=500)
-    retriever = vectorindex_openai.as_retriever()
-    chain = RetrievalQAWithSourcesChain.from_llm(llm = llm, retriever = retriever)
-    result = chain({"question": query}, return_only_outputs=True)
-    main_placefolder.text("")
-    st.header("Answer")
-    st.write(result["answer"])
-
-    #Display sources
-    sources = result.get("sources", )
-    if sources:
-        st.header("Sources")
-        source_list = sources.split("\n")
-        for source in source_list:
-            st.write(source)
+    
 
 
 
