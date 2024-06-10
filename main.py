@@ -41,36 +41,36 @@ if query:
             valid_url = False
             break
     if not url_not_empty:
-        st.error("Please enter at least one source URL")
+        st.warning("Please enter at least one source URL")
     elif valid_url == False:
         st.sidebar.warning("Please enter a valid URL")
     else:
             try:
-            #load URLs
-            loader = UnstructuredURLLoader(urls)
-            main_placefolder.text("Loading data from URLs...")
-            data = loader.load()
-
-            #split data into chunks
-            main_placefolder.text("Splitting data into chunks...")
-            rsplitter = RecursiveCharacterTextSplitter(
-                chunk_size=1000,
-                chunk_overlap=200
-            )
-            docs = rsplitter.split_documents(data)
-
-            #create text embeddings
-            main_placefolder.text("Creating vector embeddings...")
-            embeddings = OpenAIEmbeddings()
-            vectorindex_openai = FAISS.from_documents(docs, embeddings)
-
-            #save to FAISS index
-            faiss.write_index(vectorindex_openai.index, file_path)
-
-            main_placefolder.text("Retrieving your answer...")
-        except Exception as e:
-            st.error("An error occurred. Please try a different URL.")
-            print(e)
+                #load URLs
+                loader = UnstructuredURLLoader(urls)
+                main_placefolder.text("Loading data from URLs...")
+                data = loader.load()
+    
+                #split data into chunks
+                main_placefolder.text("Splitting data into chunks...")
+                rsplitter = RecursiveCharacterTextSplitter(
+                    chunk_size=1000,
+                    chunk_overlap=200
+                )
+                docs = rsplitter.split_documents(data)
+    
+                #create text embeddings
+                main_placefolder.text("Creating vector embeddings...")
+                embeddings = OpenAIEmbeddings()
+                vectorindex_openai = FAISS.from_documents(docs, embeddings)
+    
+                #save to FAISS index
+                faiss.write_index(vectorindex_openai.index, file_path)
+    
+                main_placefolder.text("Retrieving your answer...")
+            except Exception as e:
+                st.error("An error occurred. Please try a different URL.")
+                print(e)
         vectorindex_openai = FAISS.from_documents(docs, embeddings)
         vectorindex_openai.index = faiss.read_index(file_path)
         llm = OpenAI(openai_api_key= st.secrets["OPENAI_API_KEY"], temperature=0.9, max_tokens=500)
