@@ -15,7 +15,7 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 #UI
 st.title("AI Equity Research Assistant")
 st.caption("Analyze investment opportunities more efficiently with AI.")
-st.caption(" Start by entering the URL's of sources you want to analyze into the sidebar on the left of your screen.")
+st.caption(" Start by entering the URLs of sources you want to analyze into the sidebar on the left of your screen.")
 query = st.text_input("Ask a question", key="query")
 st.sidebar.header("Sources", divider="rainbow")
 st.sidebar.caption("Enter the URLs of the sources you want to analyze. Certain sources may not be supported due to their privacy settings.")
