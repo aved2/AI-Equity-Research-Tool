@@ -16,7 +16,8 @@ load_dotenv()
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 #UI
 st.title("AI Equity Research Assistant")
-st.caption("Analyze investment opportunities more efficiently with AI")
+st.caption("Analyze investment opportunities more efficiently with AI.")
+st.caption(" Start by entering the URL's of sources you want to analyze into the sidebar on the left of your screen. For mobile users, click the arrow on the top left of your screen to reveal the sidebar.")
 query = st.text_input("Ask a question", key="query")
 st.sidebar.header("Sources", divider="rainbow")
 st.sidebar.caption("Enter the URLs of the sources you want to analyze. Certain sources may not be supported due to their privacy settings.")
@@ -41,7 +42,7 @@ if query:
                 valid_url = False
                 break
         if not url_not_empty:
-            st.sidebar.warning("Please enter at least one source URL")
+            st.error("Please enter at least one source URL")
         elif valid_url == False:
             st.sidebar.warning("Please enter a valid URL")
         else:
