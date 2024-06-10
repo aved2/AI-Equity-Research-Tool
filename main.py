@@ -10,9 +10,7 @@ from langchain_community.document_loaders import UnstructuredURLLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 import faiss
-from dotenv import load_dotenv
 
-load_dotenv()
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 #UI
 st.title("AI Equity Research Assistant")
@@ -85,7 +83,7 @@ if query:
 
                 vectorindex_openai = FAISS.from_documents(docs, embeddings)
                 vectorindex_openai.index = faiss.read_index(file_path)
-                llm = OpenAI(openai_api_key= st.secrets["OPENAI_API_KEY"], temperature=0.9, max_tokens=500)
+                llm = OpenAI(openai_api_key= os.environ.get("OPEN_AI_KEY"), temperature=0.9, max_tokens=500)
                 retriever = vectorindex_openai.as_retriever()
                 chain = RetrievalQAWithSourcesChain.from_llm(llm = llm, retriever = retriever)
                 result = chain({"question": query}, return_only_outputs=True)
