@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import time
+import openai
 import langchain
 from langchain_community.llms import OpenAI
 from langchain.chains import RetrievalQAWithSourcesChain
