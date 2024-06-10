@@ -30,6 +30,20 @@ file_path = "vector_index.faiss"
 main_placefolder = st.empty()
 valid_url = True
 
+def query_chatgpt(api_key, query):
+    client = openai.Client(
+        api_key=api_key
+    )
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": query,
+            }
+        ],
+        model="gpt-3.5-turbo",
+    )
+    return chat_completion.choices[0].message.content
 
 if query:
     url_not_empty = False
@@ -75,14 +89,22 @@ if query:
                 retriever = vectorindex_openai.as_retriever()
                 chain = RetrievalQAWithSourcesChain.from_llm(llm = llm, retriever = retriever)
                 result = chain({"question": query}, return_only_outputs=True)
+                answer = result["answer"]
+                message = "Answer"
+                # Check if the answer is not found in the sources and query ChatGPT
+                if answer.strip().lower() == "i don't know." or answer.strip().lower() == "i do not know":
+                    answer = query_chatgpt(os.environ.get("OPEN_AI_KEY"), query)
+                    message = "The answer was not found in the sources. \nHere is a response from ChatGPT:"
+        
+        
                 main_placefolder.text("")
-                st.header("Answer")
-                st.write(result["answer"])
-            
+                st.subheader(message)
+                st.write(answer)
+        
                 #Display sources
                 sources = result.get("sources", )
-                if sources:
-                    st.header("Sources")
+                if answer == result["answer"] and sources:
+                    st.subheader("Sources")
                     source_list = sources.split("\n")
                     for source in source_list:
                         st.write(source)
