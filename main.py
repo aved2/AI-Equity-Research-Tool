@@ -32,20 +32,20 @@ valid_url = True
 
 
 if query:
-    try:
-        url_not_empty = False
-        #Check if url empty or invalid
-        for url in urls:
-            if url:
-                url_not_empty = True
-            if url and not url.startswith("http"):
-                valid_url = False
-                break
-        if not url_not_empty:
-            st.error("Please enter at least one source URL")
-        elif valid_url == False:
-            st.sidebar.warning("Please enter a valid URL")
-        else:
+    url_not_empty = False
+    #Check if url empty or invalid
+    for url in urls:
+        if url:
+            url_not_empty = True
+        if url and not url.startswith("http"):
+            valid_url = False
+            break
+    if not url_not_empty:
+        st.error("Please enter at least one source URL")
+    elif valid_url == False:
+        st.sidebar.warning("Please enter a valid URL")
+    else:
+            try:
             #load URLs
             loader = UnstructuredURLLoader(urls)
             main_placefolder.text("Loading data from URLs...")
@@ -68,6 +68,9 @@ if query:
             faiss.write_index(vectorindex_openai.index, file_path)
 
             main_placefolder.text("Retrieving your answer...")
+        except Exception as e:
+            st.error("An error occurred. Please try a different URL.")
+            print(e)
         vectorindex_openai = FAISS.from_documents(docs, embeddings)
         vectorindex_openai.index = faiss.read_index(file_path)
         llm = OpenAI(openai_api_key= st.secrets["OPENAI_API_KEY"], temperature=0.9, max_tokens=500)
@@ -85,9 +88,6 @@ if query:
             source_list = sources.split("\n")
             for source in source_list:
                 st.write(source)
-    except Exception as e:
-        st.error("An error occurred. Please try a different URL.")
-        print(e)
 
 
 
